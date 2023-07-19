@@ -5,6 +5,7 @@ import de.maxhenkel.voicechat.api.audiochannel.AudioPlayer;
 import de.maxhenkel.voicechat.api.audiochannel.LocationalAudioChannel;
 import de.maxhenkel.voicechat.api.opus.OpusDecoder;
 import de.maxhenkel.voicechat.api.packets.MicrophonePacket;
+import de.maxhenkel.wiretap.Wiretap;
 import de.maxhenkel.wiretap.WiretapVoicechatPlugin;
 import de.maxhenkel.wiretap.utils.AudioUtils;
 import net.minecraft.core.particles.ParticleTypes;
@@ -35,8 +36,7 @@ public class SpeakerChannel implements Supplier<short[]> {
         List<MicrophonePacket> microphonePackets = packetBuffer.computeIfAbsent(sender, k -> new ArrayList<>());
 
         if (microphonePackets.isEmpty()) {
-            //TODO configurable buffer size
-            for (int i = 0; i < 6; i++) {
+            for (int i = 0; i < Wiretap.SERVER_CONFIG.packetBufferSize.get(); i++) {
                 microphonePackets.add(null);
             }
         }
