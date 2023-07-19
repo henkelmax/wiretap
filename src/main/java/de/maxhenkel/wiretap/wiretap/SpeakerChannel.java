@@ -7,6 +7,8 @@ import de.maxhenkel.voicechat.api.opus.OpusDecoder;
 import de.maxhenkel.voicechat.api.packets.MicrophonePacket;
 import de.maxhenkel.wiretap.Wiretap;
 import de.maxhenkel.wiretap.WiretapVoicechatPlugin;
+import de.maxhenkel.wiretap.soundeffects.SoundEffect;
+import de.maxhenkel.wiretap.soundeffects.SoundEffectManager;
 import de.maxhenkel.wiretap.utils.AudioUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -23,7 +25,8 @@ public class SpeakerChannel implements Supplier<short[]> {
     private final UUID id;
     private final Map<UUID, List<short[]>> packetBuffer;
     private final DimensionLocation dimensionLocation;
-    private final Map<UUID, OpusDecoder> decoder;
+    private final Map<UUID, OpusDecoder> decoders;
+    private final SoundEffect effect;
     @Nullable
     private AudioPlayer audioPlayer;
 
@@ -32,7 +35,8 @@ public class SpeakerChannel implements Supplier<short[]> {
         this.id = id;
         this.dimensionLocation = dimensionLocation;
         packetBuffer = new HashMap<>();
-        decoder = new HashMap<>();
+        decoders = new HashMap<>();
+        effect = SoundEffectManager.getSoundEffect();
     }
 
     public void addPacket(ServerPlayer player, MicrophonePacket packet) {
@@ -71,7 +75,7 @@ public class SpeakerChannel implements Supplier<short[]> {
     }
 
     private OpusDecoder getDecoder(UUID sender) {
-        return decoder.computeIfAbsent(sender, k -> WiretapVoicechatPlugin.voicechatServerApi.createDecoder());
+        return decoders.computeIfAbsent(sender, k -> WiretapVoicechatPlugin.voicechatServerApi.createDecoder());
     }
 
     private AudioPlayer getAudioPlayer() {
@@ -107,13 +111,12 @@ public class SpeakerChannel implements Supplier<short[]> {
         short[] combinedAudio = AudioUtils.combineAudio(packetsToCombine);
 
         spawnParticle();
-        // TODO Add noise effects
-        // return AudioUtils.applyRadioEffect(combinedAudio);
-        return combinedAudio;
+
+        return effect.applyEffect(combinedAudio);
     }
 
     public void close() {
-        decoder.values().forEach(OpusDecoder::close);
+        decoders.values().forEach(OpusDecoder::close);
     }
 
     @Override
@@ -141,14 +144,16 @@ public class SpeakerChannel implements Supplier<short[]> {
 
         ServerLevel level = dimensionLocation.getLevel();
         Vec3 vec3 = Vec3.atBottomCenterOf(dimensionLocation.getPos()).add(0D, 0.8D, 0D);
-        float random = (float) level.getRandom().nextInt(4) / 24F;
         level.players().stream().filter(player -> dimensionLocation.getDistance(player.position()) <= 32D).forEach(player -> {
-            level.sendParticles(ParticleTypes.NOTE, vec3.x(), vec3.y(), vec3.z(), 0, random, 0D, 0D, 1D);
+            level.getServer().execute(() -> {
+                float random = (float) level.getRandom().nextInt(4) / 24F;
+                level.sendParticles(ParticleTypes.NOTE, vec3.x(), vec3.y(), vec3.z(), 0, random, 0D, 0D, 1D);
+            });
         });
     }
 
     public void onPlayerDisconnect(ServerPlayer serverPlayer) {
-        OpusDecoder remove = decoder.remove(serverPlayer.getUUID());
+        OpusDecoder remove = decoders.remove(serverPlayer.getUUID());
         if (remove != null) {
             remove.close();
         }
