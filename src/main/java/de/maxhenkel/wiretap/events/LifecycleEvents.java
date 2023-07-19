@@ -2,6 +2,7 @@ package de.maxhenkel.wiretap.events;
 
 import de.maxhenkel.wiretap.wiretap.WiretapManager;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
 
 public class LifecycleEvents {
 
@@ -9,4 +10,7 @@ public class LifecycleEvents {
         WiretapManager.getInstance().clear();
     }
 
+    public static void onDisconnect(ServerGamePacketListenerImpl serverGamePacketListener, MinecraftServer server) {
+        WiretapManager.getInstance().onPlayerDisconnect(serverGamePacketListener.getPlayer());
+    }
 }

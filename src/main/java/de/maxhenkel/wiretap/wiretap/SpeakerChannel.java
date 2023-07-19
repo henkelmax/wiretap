@@ -10,6 +10,7 @@ import de.maxhenkel.wiretap.WiretapVoicechatPlugin;
 import de.maxhenkel.wiretap.utils.AudioUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -98,7 +99,6 @@ public class SpeakerChannel implements Supplier<short[]> {
 
     public void close() {
         decoder.values().forEach(OpusDecoder::close);
-        //TODO Remove decoders on player leave
     }
 
     @Override
@@ -132,4 +132,10 @@ public class SpeakerChannel implements Supplier<short[]> {
         });
     }
 
+    public void onPlayerDisconnect(ServerPlayer serverPlayer) {
+        OpusDecoder remove = decoder.remove(serverPlayer.getUUID());
+        if (remove != null) {
+            remove.close();
+        }
+    }
 }

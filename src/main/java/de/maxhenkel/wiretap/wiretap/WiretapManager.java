@@ -176,4 +176,9 @@ public class WiretapManager {
             speakerChannel.close();
         }
     }
+
+    public void onPlayerDisconnect(ServerPlayer serverPlayer) {
+        speakers.values().forEach(speakerChannel -> speakerChannel.onPlayerDisconnect(serverPlayer));
+    }
+
 }
