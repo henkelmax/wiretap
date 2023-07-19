@@ -1,6 +1,6 @@
 package de.maxhenkel.wiretap.soundeffects;
 
-public class WalkieTalkieEffect implements SoundEffect {
+public class OldSpeakerEffect implements SoundEffect {
 
     private static final double SAMPLE_RATE = 48000D;
     private static final double MAX_SHORT = Short.MAX_VALUE;
@@ -18,17 +18,17 @@ public class WalkieTalkieEffect implements SoundEffect {
      * @param centerFrequency center frequency in Hz
      * @param bandwidth       bandwidth in Hz
      */
-    public WalkieTalkieEffect(double centerFrequency, double bandwidth) {
+    public OldSpeakerEffect(double centerFrequency, double bandwidth) {
         this.normalizedCenterFrequency = 2D * centerFrequency / SAMPLE_RATE;
         this.normalizedBandwidth = 2D * bandwidth / SAMPLE_RATE;
     }
 
-    public WalkieTalkieEffect() {
+    public OldSpeakerEffect() {
         this(750, 2000);
     }
 
     /**
-     * Function to apply the walkie-talkie effect on the input audio
+     * Function to apply the old speaker effect on the input audio
      *
      * @param audioData input audio data
      * @return output audio data

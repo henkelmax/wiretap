@@ -18,9 +18,9 @@ public class ServerConfig {
         anvilCrafting = builder.booleanEntry("anvil_crafting", true, "Whether the items can be crafted in the anvil");
         speakerSoundEffect = builder.stringEntry(
                 "speaker_sound_effect",
-                "walkie_talkie",
+                "old_speaker",
                 "The sound effect to apply to the speaker",
-                "Valid values are: none, walkie_talkie"
+                "Valid values are: none, old_speaker"
         );
     }
 
