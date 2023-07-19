@@ -19,6 +19,7 @@ import java.util.function.Supplier;
 
 public class SpeakerChannel implements Supplier<short[]> {
 
+    private WiretapManager wiretapManager;
     private final UUID id;
     private final Map<UUID, List<short[]>> packetBuffer;
     private final DimensionLocation dimensionLocation;
@@ -26,15 +27,25 @@ public class SpeakerChannel implements Supplier<short[]> {
     @Nullable
     private AudioPlayer audioPlayer;
 
-    public SpeakerChannel(UUID id, DimensionLocation dimensionLocation) {
+    public SpeakerChannel(WiretapManager wiretapManager, UUID id, DimensionLocation dimensionLocation) {
+        this.wiretapManager = wiretapManager;
         this.id = id;
         this.dimensionLocation = dimensionLocation;
         packetBuffer = new HashMap<>();
         decoder = new HashMap<>();
     }
 
-    public void addPacket(UUID sender, MicrophonePacket packet) {
-        List<short[]> microphonePackets = packetBuffer.computeIfAbsent(sender, k -> new ArrayList<>());
+    public void addPacket(ServerPlayer player, MicrophonePacket packet) {
+        UUID senderUUID = player.getUUID();
+
+        DimensionLocation microphoneLocation = wiretapManager.getMicrophoneLocation(id);
+
+        if (microphoneLocation == null) {
+            Wiretap.LOGGER.warn("Microphone location not found for {}}", id);
+            return;
+        }
+
+        List<short[]> microphonePackets = packetBuffer.computeIfAbsent(senderUUID, k -> new ArrayList<>());
 
         if (microphonePackets.isEmpty()) {
             for (int i = 0; i < Wiretap.SERVER_CONFIG.packetBufferSize.get(); i++) {
@@ -42,13 +53,17 @@ public class SpeakerChannel implements Supplier<short[]> {
             }
         }
 
-        OpusDecoder decoder = getDecoder(sender);
+        OpusDecoder decoder = getDecoder(senderUUID);
         byte[] opusEncodedData = packet.getOpusEncodedData();
         if (opusEncodedData == null || opusEncodedData.length <= 0) {
             decoder.resetState();
             return;
         }
-        microphonePackets.add(decoder.decode(opusEncodedData));
+
+        double distance = microphoneLocation.getDistance(player.position());
+        double volume = AudioUtils.getDistanceVolume(Wiretap.SERVER_CONFIG.microphonePickupRange.get(), distance);
+
+        microphonePackets.add(AudioUtils.setVolume(decoder.decode(opusEncodedData), volume));
 
         if (audioPlayer == null) {
             getAudioPlayer().startPlaying();

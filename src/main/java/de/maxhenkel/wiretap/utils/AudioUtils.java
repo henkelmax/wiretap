@@ -57,4 +57,16 @@ public class AudioUtils {
         return processedAudio;
     }
 
+    public static double getDistanceVolume(double maxDistance, double distance) {
+        distance = Math.min(distance, maxDistance);
+        return (1D - distance / maxDistance);
+    }
+
+    public static short[] setVolume(short[] audio, double volume) {
+        for (int i = 0; i < audio.length; i++) {
+            audio[i] = (short) (audio[i] * volume);
+        }
+        return audio;
+    }
+
 }

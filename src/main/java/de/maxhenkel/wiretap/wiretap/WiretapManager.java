@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +46,7 @@ public class WiretapManager {
 
         UUID speaker = HeadUtils.getSpeaker(ownerProfile);
         if (speaker != null) {
-            speakers.put(speaker, new SpeakerChannel(speaker, new DimensionLocation(serverLevel, skullBlockEntity.getBlockPos())));
+            speakers.put(speaker, new SpeakerChannel(this, speaker, new DimensionLocation(serverLevel, skullBlockEntity.getBlockPos())));
             return;
         }
     }
@@ -74,7 +75,7 @@ public class WiretapManager {
             if (channel == null) {
                 continue;
             }
-            channel.addPacket(player.getUUID(), event.getPacket());
+            channel.addPacket(player, event.getPacket());
         }
     }
 
@@ -151,21 +152,6 @@ public class WiretapManager {
         return realSpeakerId.equals(speakerId);
     }
 
-    public void clear() {
-        speakers.values().forEach(SpeakerChannel::close);
-        speakers.clear();
-        microphones.clear();
-    }
-
-    private static WiretapManager instance;
-
-    public static WiretapManager getInstance() {
-        if (instance == null) {
-            instance = new WiretapManager();
-        }
-        return instance;
-    }
-
     public void removeMicrophone(UUID microphone) {
         microphones.remove(microphone);
     }
@@ -179,6 +165,26 @@ public class WiretapManager {
 
     public void onPlayerDisconnect(ServerPlayer serverPlayer) {
         speakers.values().forEach(speakerChannel -> speakerChannel.onPlayerDisconnect(serverPlayer));
+    }
+
+    @Nullable
+    public DimensionLocation getMicrophoneLocation(UUID microphone) {
+        return microphones.get(microphone);
+    }
+
+    public void clear() {
+        speakers.values().forEach(SpeakerChannel::close);
+        speakers.clear();
+        microphones.clear();
+    }
+
+    private static WiretapManager instance;
+
+    public static WiretapManager getInstance() {
+        if (instance == null) {
+            instance = new WiretapManager();
+        }
+        return instance;
     }
 
 }
