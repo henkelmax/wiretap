@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 public class SpeakerChannel implements Supplier<short[]> {
 
     private final UUID id;
-    private final Map<UUID, List<MicrophonePacket>> packetBuffer;
+    private final Map<UUID, List<short[]>> packetBuffer;
     private final DimensionLocation dimensionLocation;
     private final Map<UUID, OpusDecoder> decoder;
     @Nullable
@@ -33,7 +33,7 @@ public class SpeakerChannel implements Supplier<short[]> {
     }
 
     public void addPacket(UUID sender, MicrophonePacket packet) {
-        List<MicrophonePacket> microphonePackets = packetBuffer.computeIfAbsent(sender, k -> new ArrayList<>());
+        List<short[]> microphonePackets = packetBuffer.computeIfAbsent(sender, k -> new ArrayList<>());
 
         if (microphonePackets.isEmpty()) {
             for (int i = 0; i < Wiretap.SERVER_CONFIG.packetBufferSize.get(); i++) {
@@ -41,7 +41,13 @@ public class SpeakerChannel implements Supplier<short[]> {
             }
         }
 
-        microphonePackets.add(packet);
+        OpusDecoder decoder = getDecoder(sender);
+        byte[] opusEncodedData = packet.getOpusEncodedData();
+        if (opusEncodedData == null || opusEncodedData.length <= 0) {
+            decoder.resetState();
+            return;
+        }
+        microphonePackets.add(decoder.decode(opusEncodedData));
 
         if (audioPlayer == null) {
             getAudioPlayer().startPlaying();
@@ -66,17 +72,14 @@ public class SpeakerChannel implements Supplier<short[]> {
     @Nullable
     public short[] generatePacket() {
         List<short[]> packetsToCombine = new ArrayList<>();
-        for (Map.Entry<UUID, List<MicrophonePacket>> packets : packetBuffer.entrySet()) {
-            OpusDecoder decoder = getDecoder(packets.getKey());
+        for (Map.Entry<UUID, List<short[]>> packets : packetBuffer.entrySet()) {
             if (packets.getValue().isEmpty()) {
-                decoder.resetState();
                 continue;
             }
-            MicrophonePacket packet = packets.getValue().remove(0);
-            if (packet == null) {
+            short[] audio = packets.getValue().remove(0);
+            if (audio == null) {
                 continue;
             }
-            short[] audio = decoder.decode(packet.getOpusEncodedData());
             packetsToCombine.add(audio);
         }
         packetBuffer.values().removeIf(List::isEmpty);
