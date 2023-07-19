@@ -20,7 +20,7 @@ public class ServerConfig {
                 "speaker_sound_effect",
                 "old_speaker",
                 "The sound effect to apply to the speaker",
-                "Valid values are: none, old_speaker"
+                "Valid values are: 'none', 'old_speaker', 'low_quality'"
         );
     }
 
