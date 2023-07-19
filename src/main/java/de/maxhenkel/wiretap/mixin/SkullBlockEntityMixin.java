@@ -24,7 +24,6 @@ public class SkullBlockEntityMixin extends BlockEntity {
     @Inject(method = "setOwner", at = @At("RETURN"))
     public void setOwner(GameProfile gameProfile, CallbackInfo ci) {
         if (level != null && !level.isClientSide) {
-            System.out.println("SkullBlockEntity setOwner with level");
             WiretapManager.getInstance().onLoadHead((SkullBlockEntity) (Object) this);
         }
     }
@@ -32,7 +31,6 @@ public class SkullBlockEntityMixin extends BlockEntity {
     @Inject(method = "load", at = @At("RETURN"))
     public void load(CompoundTag compoundTag, CallbackInfo ci) {
         if (level != null && !level.isClientSide) {
-            System.out.println("SkullBlockEntity load with level");
             WiretapManager.getInstance().onLoadHead((SkullBlockEntity) (Object) this);
         }
     }
@@ -42,7 +40,6 @@ public class SkullBlockEntityMixin extends BlockEntity {
         Level oldLevel = level;
         super.setLevel(newLevel);
         if (oldLevel == null && newLevel != null && !newLevel.isClientSide) {
-            System.out.printf("SkullBlockEntity setLevel %s -> %s%n", oldLevel, newLevel);
             WiretapManager.getInstance().onLoadHead((SkullBlockEntity) (Object) this);
         }
     }
