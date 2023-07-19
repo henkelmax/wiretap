@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "de.maxhenkel.wiretap.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "SkullBlockEntityMixin",
+    "BlockMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
