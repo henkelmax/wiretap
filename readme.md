@@ -4,15 +4,15 @@ A server-side Simple Voice Chat addon mod for Fabric, that adds a microphone and
 
 ## Disclaimer
 
-When installing this on your server, you are responsible for making sure that players are aware of the functionality of
-the mod.
+When installing this on your server,
+you are responsible for making sure that players are aware of the functionality of the mod.
 This mod is not intended to be used for spying on people, this is **only for role-playing purposes**!
 
 ## Usage
 
 - Install this mod alongside [Simple Voice Chat](https://modrinth.com/plugin/simple-voice-chat) on your server
-- Make sure you set up the voice chat mod correctly (
-  see [here](https://modrepo.de/minecraft/voicechat/wiki/server_setup))
+- Make sure you set up the voice chat mod correctly
+(see [here](https://modrepo.de/minecraft/voicechat/wiki/server_setup))
 - Craft a *Calibrated Skulk Sensor*
 - Make sure you have at least one level if you are in survival mode
 - Place the *Calibrated Skulk Sensor* in an anvil
