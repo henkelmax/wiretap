@@ -23,6 +23,10 @@ This mod is not intended to be used for spying on people, this is **only for rol
 - The microphone and speaker blocks will have a unique ID shown in their tooltip - Microphones and speakers with the same ID will be connected to each other
 - Don't place multiple microphones or speakers with the same ID, as this will cause issues
 
+## Commands
+
+- `/wiretap items` - Gives you a microphone and speaker (Requires OP permissions by default)
+
 ## Configuration
 
 | Property                   | Description                                                                                       | Default       |
