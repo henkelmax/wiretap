@@ -11,8 +11,7 @@ This mod is not intended to be used for spying on people, this is **only for rol
 ## Usage
 
 - Install this mod alongside [Simple Voice Chat](https://modrinth.com/plugin/simple-voice-chat) on your server
-- Make sure you set up the voice chat mod correctly
-(see [here](https://modrepo.de/minecraft/voicechat/wiki/server_setup))
+- Make sure you set up the voice chat mod correctly (see [here](https://modrepo.de/minecraft/voicechat/wiki/server_setup))
 - Craft a *Calibrated Skulk Sensor*
 - Make sure you have at least one level if you are in survival mode
 - Place the *Calibrated Skulk Sensor* in an anvil
@@ -21,8 +20,7 @@ This mod is not intended to be used for spying on people, this is **only for rol
 - When taking out the microphone, you will get a speaker added to your inventory as well
 - Place the microphone block where you want to listen in on people
 - Place the speaker block where you want to hear people
-- The microphone and speaker blocks will have a unique ID shown in their tooltip - Microphones and speakers with the
-  same ID will be connected to each other
+- The microphone and speaker blocks will have a unique ID shown in their tooltip - Microphones and speakers with the same ID will be connected to each other
 - Don't place multiple microphones or speakers with the same ID, as this will cause issues
 
 ## Configuration
