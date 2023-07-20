@@ -80,6 +80,7 @@ public class SpeakerChannel implements Supplier<short[]> {
             Position position = WiretapVoicechatPlugin.voicechatServerApi.createPosition(dimensionLocation.getX() + 0.5D, dimensionLocation.getY() + 0.5D, dimensionLocation.getZ() + 0.5D);
             LocationalAudioChannel channel = WiretapVoicechatPlugin.voicechatServerApi.createLocationalAudioChannel(id, serverLevel, position);
             channel.setCategory(WiretapVoicechatPlugin.WIRETAP_CATEGORY);
+            channel.setDistance(Wiretap.SERVER_CONFIG.speakerAudioRange.get().floatValue());
             audioPlayer = WiretapVoicechatPlugin.voicechatServerApi.createAudioPlayer(channel, WiretapVoicechatPlugin.voicechatServerApi.createEncoder(), this);
         }
         return audioPlayer;

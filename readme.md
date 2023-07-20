@@ -30,6 +30,7 @@ This mod is not intended to be used for spying on people, this is **only for rol
 | Property                   | Description                                                                                       | Default       |
 |----------------------------|---------------------------------------------------------------------------------------------------|---------------|
 | `microphone_pickup_range`  | The range in which microphones can pick up sounds                                                 | `32.0`        |
+| `speaker_audio_range`      | The audible range of speakers                                                                     | `32.0`        |
 | `command_permission_level` | The permission level required to use the commands                                                 | `2`           |
 | `packet_buffer_size`       | The amount of packets to buffer before playing                                                    | `6`           |
 | `anvil_crafting`           | Whether the items can be crafted in the anvil                                                     | `true`        |

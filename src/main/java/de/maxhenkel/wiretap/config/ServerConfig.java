@@ -6,6 +6,7 @@ import de.maxhenkel.configbuilder.ConfigEntry;
 public class ServerConfig {
 
     public final ConfigEntry<Double> microphonePickupRange;
+    public final ConfigEntry<Double> speakerAudioRange;
     public final ConfigEntry<Integer> commandPermissionLevel;
     public final ConfigEntry<Integer> packetBufferSize;
     public final ConfigEntry<Boolean> anvilCrafting;
@@ -20,6 +21,13 @@ public class ServerConfig {
                 1D,
                 512D,
                 "The range in which microphones can pick up sounds"
+        );
+        speakerAudioRange = builder.doubleEntry(
+                "speaker_audio_range",
+                32D,
+                1D,
+                512D,
+                "The audible range of speakers"
         );
         commandPermissionLevel = builder.integerEntry(
                 "command_permission_level",
