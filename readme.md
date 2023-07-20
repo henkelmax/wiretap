@@ -27,13 +27,13 @@ This mod is not intended to be used for spying on people, this is **only for rol
 
 ## Configuration
 
-| Property                   | Description                                                                                       | Default                                                                                                  |
-|----------------------------|---------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
-| `microphone_pickup_range`  | The range in which microphones can pick up sounds                                                 | `32.0`                                                                                                   |
-| `command_permission_level` | The permission level required to use the commands                                                 | `2`                                                                                                      |
-| `packet_buffer_size`       | The amount of packets to buffer before playing                                                    | `6`                                                                                                      |
-| `anvil_crafting`           | Whether the items can be crafted in the anvil                                                     | `true`                                                                                                   |
-| `speaker_sound_effect`     | The sound effect to apply to the speaker - Valid values are: `none`, `old_speaker`, `low_quality` | `old_speaker`                                                                                            |
-| `microphone_skin_url`      | The skin url for the microphone block                                                             | `http://textures.minecraft.net/texture/ccf0a27d246355e4dcbbd7b369d326cfed7aed1ba04e5dd9ba68cdecc4133d33` |
-| `speaker_skin_url`         | The skin url for the speaker block                                                                | `http://textures.minecraft.net/texture/148a8c55891dec76764449f57ba677be3ee88a06921ca93b6cc7c9611a7af`    |
+| Property                   | Description                                                                                       | Default       |
+|----------------------------|---------------------------------------------------------------------------------------------------|---------------|
+| `microphone_pickup_range`  | The range in which microphones can pick up sounds                                                 | `32.0`        |
+| `command_permission_level` | The permission level required to use the commands                                                 | `2`           |
+| `packet_buffer_size`       | The amount of packets to buffer before playing                                                    | `6`           |
+| `anvil_crafting`           | Whether the items can be crafted in the anvil                                                     | `true`        |
+| `speaker_sound_effect`     | The sound effect to apply to the speaker - Valid values are: `none`, `old_speaker`, `low_quality` | `old_speaker` |
+| `microphone_skin_url`      | The skin url for the microphone block                                                             |               |
+| `speaker_skin_url`         | The skin url for the speaker block                                                                |               |
 
