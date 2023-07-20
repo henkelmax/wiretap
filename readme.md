@@ -37,3 +37,7 @@ This mod is not intended to be used for spying on people, this is **only for rol
 | `microphone_skin_url`      | The skin url for the microphone block                                                             |               |
 | `speaker_skin_url`         | The skin url for the speaker block                                                                |               |
 
+## Credits
+
+- [Microphone Skin](https://minecraft-heads.com/custom-heads/decoration/6360-studio-microphone)
+- [Speaker Skin](https://minecraft-heads.com/custom-heads/decoration/215-radio)
