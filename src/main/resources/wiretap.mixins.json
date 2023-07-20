@@ -6,7 +6,8 @@
   "mixins": [
     "SkullBlockEntityMixin",
     "BlockMixin",
-    "AnvilMenuMixin"
+    "AnvilMenuMixin",
+    "BlockBehaviourMixin"
   ],
   "injectors": {
     "defaultRequire": 1

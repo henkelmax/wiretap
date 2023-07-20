@@ -50,6 +50,10 @@ public class DimensionLocation {
         return Math.sqrt(p.distanceToSqr(pos.getX(), pos.getY(), pos.getZ()));
     }
 
+    public boolean isLoaded() {
+        return level.isLoaded(pos);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -68,4 +72,8 @@ public class DimensionLocation {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "X %s, Y %s, Z %s in %s".formatted(getX(), getY(), getZ(), getDimension().toString());
+    }
 }

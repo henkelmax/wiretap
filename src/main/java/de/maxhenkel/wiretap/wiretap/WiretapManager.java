@@ -11,8 +11,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -114,10 +114,13 @@ public class WiretapManager {
         });
     }
 
-    private boolean verifyMicrophoneLocation(UUID microphoneId, DimensionLocation location) {
+    public boolean verifyMicrophoneLocation(UUID microphoneId, @Nullable DimensionLocation location) {
+        if (location == null) {
+            return false;
+        }
         ServerLevel level = location.getLevel();
         BlockPos pos = location.getPos();
-        if (!level.isLoaded(pos)) {
+        if (!location.isLoaded()) {
             return false;
         }
         BlockEntity blockEntity = level.getBlockEntity(pos);
@@ -135,10 +138,14 @@ public class WiretapManager {
         return realMicrophoneId.equals(microphoneId);
     }
 
-    private boolean verifySpeakerLocation(UUID speakerId, SpeakerChannel channel) {
-        ServerLevel level = channel.getDimensionLocation().getLevel();
-        BlockPos pos = channel.getDimensionLocation().getPos();
-        if (!level.isLoaded(pos)) {
+    public boolean verifySpeakerLocation(UUID speakerId, @Nullable SpeakerChannel channel) {
+        if (channel == null) {
+            return false;
+        }
+        DimensionLocation dimensionLocation = channel.getDimensionLocation();
+        ServerLevel level = dimensionLocation.getLevel();
+        BlockPos pos = dimensionLocation.getPos();
+        if (!dimensionLocation.isLoaded()) {
             return false;
         }
         BlockEntity blockEntity = level.getBlockEntity(pos);
@@ -174,6 +181,11 @@ public class WiretapManager {
     @Nullable
     public DimensionLocation getMicrophoneLocation(UUID microphone) {
         return microphones.get(microphone);
+    }
+
+    @Nullable
+    public SpeakerChannel getSpeakerChannel(UUID speaker) {
+        return speakers.get(speaker);
     }
 
     public void clear() {

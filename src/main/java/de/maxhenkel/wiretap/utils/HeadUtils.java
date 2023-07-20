@@ -37,6 +37,9 @@ public class HeadUtils {
 
     @Nullable
     public static UUID getMicrophone(GameProfile profile) {
+        if (profile == null) {
+            return null;
+        }
         if (!profile.getName().equals(MICROPHONE)) {
             return null;
         }
@@ -45,6 +48,9 @@ public class HeadUtils {
 
     @Nullable
     public static UUID getSpeaker(GameProfile profile) {
+        if (profile == null) {
+            return null;
+        }
         if (!profile.getName().equals(SPEAKER)) {
             return null;
         }
