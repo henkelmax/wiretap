@@ -4,7 +4,6 @@ import de.maxhenkel.voicechat.api.Position;
 import de.maxhenkel.voicechat.api.audiochannel.AudioPlayer;
 import de.maxhenkel.voicechat.api.audiochannel.LocationalAudioChannel;
 import de.maxhenkel.voicechat.api.opus.OpusDecoder;
-import de.maxhenkel.voicechat.api.packets.MicrophonePacket;
 import de.maxhenkel.wiretap.Wiretap;
 import de.maxhenkel.wiretap.WiretapVoicechatPlugin;
 import de.maxhenkel.wiretap.soundeffects.SoundEffect;
@@ -39,9 +38,7 @@ public class SpeakerChannel implements Supplier<short[]> {
         effect = SoundEffectManager.getSoundEffect();
     }
 
-    public void addPacket(ServerPlayer player, MicrophonePacket packet) {
-        UUID senderUUID = player.getUUID();
-
+    public void addPacket(UUID sender, Vec3 senderLocation, byte[] opusEncodedData) {
         DimensionLocation microphoneLocation = wiretapManager.getMicrophoneLocation(id);
 
         if (microphoneLocation == null) {
@@ -49,7 +46,7 @@ public class SpeakerChannel implements Supplier<short[]> {
             return;
         }
 
-        List<short[]> microphonePackets = packetBuffer.computeIfAbsent(senderUUID, k -> new ArrayList<>());
+        List<short[]> microphonePackets = packetBuffer.computeIfAbsent(sender, k -> new ArrayList<>());
 
         if (microphonePackets.isEmpty()) {
             for (int i = 0; i < Wiretap.SERVER_CONFIG.packetBufferSize.get(); i++) {
@@ -57,14 +54,13 @@ public class SpeakerChannel implements Supplier<short[]> {
             }
         }
 
-        OpusDecoder decoder = getDecoder(senderUUID);
-        byte[] opusEncodedData = packet.getOpusEncodedData();
+        OpusDecoder decoder = getDecoder(sender);
         if (opusEncodedData == null || opusEncodedData.length <= 0) {
             decoder.resetState();
             return;
         }
 
-        double distance = microphoneLocation.getDistance(player.position());
+        double distance = microphoneLocation.getDistance(senderLocation);
         double volume = AudioUtils.getDistanceVolume(Wiretap.SERVER_CONFIG.microphonePickupRange.get(), distance);
 
         microphonePackets.add(AudioUtils.setVolume(decoder.decode(opusEncodedData), volume));

@@ -64,7 +64,11 @@ public class WiretapManager {
         ServerPlayer player = (ServerPlayer) senderConnection.getPlayer().getPlayer();
         ServerLevel serverLevel = player.serverLevel();
 
-        List<UUID> nearbyMicrophones = getNearbyMicrophones(serverLevel, player.position());
+        onAudio(serverLevel, player.getUUID(), player.position(), event.getPacket().getOpusEncodedData());
+    }
+
+    private void onAudio(ServerLevel serverLevel, UUID sender, Vec3 senderLocation, byte[] opusEncodedData) {
+        List<UUID> nearbyMicrophones = getNearbyMicrophones(serverLevel, senderLocation);
 
         for (UUID id : nearbyMicrophones) {
             verifyChannel(serverLevel, id);
@@ -75,7 +79,7 @@ public class WiretapManager {
             if (channel == null) {
                 continue;
             }
-            channel.addPacket(player, event.getPacket());
+            channel.addPacket(sender, senderLocation, opusEncodedData);
         }
     }
 
