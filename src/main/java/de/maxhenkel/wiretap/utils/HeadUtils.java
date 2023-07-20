@@ -7,6 +7,7 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.util.UUIDTypeAdapter;
+import de.maxhenkel.wiretap.Wiretap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -26,16 +27,12 @@ public class HeadUtils {
     public static final String MICROPHONE = "microphone-aa41dc91-b8f1-4d4e-8c2d-5d95d541748c";
     public static final String SPEAKER = "speaker-aa41dc91-b8f1-4d4e-8c2d-5d95d541748c";
 
-    // https://minecraft-heads.com/custom-heads/decoration/6360-studio-microphone
     public static ItemStack createMicrophone(UUID id) {
-        //TODO Make texture configurable
-        return createHead("Microphone", id, MICROPHONE, "http://textures.minecraft.net/texture/ccf0a27d246355e4dcbbd7b369d326cfed7aed1ba04e5dd9ba68cdecc4133d33");
+        return createHead("Microphone", id, MICROPHONE, Wiretap.SERVER_CONFIG.microphoneSkinUrl.get());
     }
 
-    // https://minecraft-heads.com/custom-heads/decoration/215-radio
     public static ItemStack createSpeaker(UUID id) {
-        //TODO Make texture configurable
-        return createHead("Speaker", id, SPEAKER, "http://textures.minecraft.net/texture/148a8c55891dec76764449f57ba677be3ee88a06921ca93b6cc7c9611a7af");
+        return createHead("Speaker", id, SPEAKER, Wiretap.SERVER_CONFIG.speakerSkinUrl.get());
     }
 
     @Nullable
