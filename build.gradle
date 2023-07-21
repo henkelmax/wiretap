@@ -147,8 +147,6 @@ shadowJar {
     configurations = [project.configurations.shadow]
     archiveClassifier = 'shadow-dev'
     relocate 'de.maxhenkel.configbuilder', "de.maxhenkel.${mod_id}.configbuilder"
-    relocate 'javazoom', "de.maxhenkel.${mod_id}.javazoom"
-    relocate 'org.tritonus', "de.maxhenkel.${mod_id}.tritonus"
 }
 
 remapJar {
