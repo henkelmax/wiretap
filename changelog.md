@@ -1,0 +1,1 @@
+- Fixed wall mounted heads not being clickable

@@ -34,7 +34,7 @@ public class BlockBehaviourMixin {
         if (!interactionHand.equals(InteractionHand.MAIN_HAND)) {
             return;
         }
-        if (!blockState.getBlock().equals(Blocks.PLAYER_HEAD)) {
+        if (!blockState.getBlock().equals(Blocks.PLAYER_HEAD) && !blockState.getBlock().equals(Blocks.PLAYER_WALL_HEAD)) {
             return;
         }
 
