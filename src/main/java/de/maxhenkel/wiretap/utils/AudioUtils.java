@@ -12,7 +12,11 @@ public class AudioUtils {
         for (int i = 0; i < result.length; i++) {
             sample = 0;
             for (short[] audio : audioParts) {
-                sample += audio[i];
+                if (audio == null) {
+                    sample += 0;
+                } else {
+                    sample += audio[i];
+                }
             }
             if (sample > Short.MAX_VALUE) {
                 result[i] = Short.MAX_VALUE;

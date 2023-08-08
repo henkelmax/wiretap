@@ -94,9 +94,6 @@ public class SpeakerChannel implements Supplier<short[]> {
                 continue;
             }
             short[] audio = packets.getValue().remove(0);
-            if (audio == null) {
-                continue;
-            }
             packetsToCombine.add(audio);
         }
         packetBuffer.values().removeIf(List::isEmpty);
@@ -114,12 +111,18 @@ public class SpeakerChannel implements Supplier<short[]> {
 
     public void close() {
         decoders.values().forEach(OpusDecoder::close);
+        if (audioPlayer != null) {
+            audioPlayer.stopPlaying();
+        }
     }
 
     @Override
     public short[] get() {
         short[] audio = generatePacket();
         if (audio == null) {
+            if (audioPlayer != null) {
+                audioPlayer.stopPlaying();
+            }
             audioPlayer = null;
             return null;
         }
