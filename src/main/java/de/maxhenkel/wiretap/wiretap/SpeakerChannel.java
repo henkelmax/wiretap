@@ -110,6 +110,13 @@ public class SpeakerChannel implements Supplier<short[]> {
     }
 
     public void close() {
+        try {
+            // This fixes a weird bug where rapidly breaking and placing a speaker causes a crash caused by opus4j
+            // No idea why sleeping fixes it
+            // TODO Investigate
+            Thread.sleep(1L);
+        } catch (InterruptedException ignored) {
+        }
         decoders.values().forEach(OpusDecoder::close);
         if (audioPlayer != null) {
             audioPlayer.stopPlaying();
