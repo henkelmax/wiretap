@@ -1,1 +1,1 @@
-- Fixed wall mounted heads not being clickable
+- Properly fixed crash when placing and breaking speaker
