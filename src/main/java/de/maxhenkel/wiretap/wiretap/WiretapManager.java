@@ -1,5 +1,7 @@
 package de.maxhenkel.wiretap.wiretap;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.mojang.authlib.GameProfile;
 import de.maxhenkel.voicechat.api.VoicechatConnection;
 import de.maxhenkel.voicechat.api.events.MicrophonePacketEvent;
@@ -17,16 +19,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 public class WiretapManager {
 
     //TODO Regularly check for dead channels
     private final Map<UUID, DimensionLocation> microphones;
     private final Map<UUID, SpeakerChannel> speakers;
+    private final Cache<UUID, Long> lastCheckCache;
 
     public WiretapManager() {
         microphones = new HashMap<>();
         speakers = new HashMap<>();
+        lastCheckCache = CacheBuilder.newBuilder().expireAfterAccess(5L, TimeUnit.SECONDS).build();
     }
 
     public void onLoadHead(SkullBlockEntity skullBlockEntity) {
@@ -83,14 +89,12 @@ public class WiretapManager {
         }
     }
 
-    private long lastCheck = 0L;
-
     private void verifyChannel(ServerLevel serverLevel, UUID id) {
         long time = System.currentTimeMillis();
-        if (time - lastCheck < 1000L) {
+        if (time - getLastCheck(id) < 1000L) {
             return;
         }
-        lastCheck = time;
+        lastCheckCache.put(id, time);
 
         serverLevel.getServer().execute(() -> {
             DimensionLocation dimensionLocation = microphones.get(id);
@@ -112,6 +116,14 @@ public class WiretapManager {
                 speakers.remove(id);
             }
         });
+    }
+
+    private long getLastCheck(UUID id) {
+        try {
+            return lastCheckCache.get(id, () -> 0L);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public boolean verifyMicrophoneLocation(UUID microphoneId, @Nullable DimensionLocation location) {

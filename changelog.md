@@ -1,1 +1,1 @@
-- Properly fixed crash when placing and breaking speaker
+- Fixed ghost microphones and speakers
